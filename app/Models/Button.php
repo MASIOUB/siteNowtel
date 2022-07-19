@@ -11,8 +11,8 @@ class Button extends Model
 
     protected $table = 'buttons';
     protected $fillable = [
-        'content',
-        'url'
+        'button_content',
+        'button_link'
     ];
 
     public function divisions()

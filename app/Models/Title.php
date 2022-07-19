@@ -11,7 +11,7 @@ class Title extends Model
 
     protected $table = 'titles';
     protected $fillable = [
-        'content',
+        'title_content',
         'color_content',
         'position',
         'color_id'

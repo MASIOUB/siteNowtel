@@ -11,7 +11,7 @@ class Paragraph extends Model
 
     protected $table = 'paragraphs';
     protected $fillable = [
-        'content',
+        'paragraph_content',
         'color_id'
     ];
 

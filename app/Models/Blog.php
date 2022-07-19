@@ -17,4 +17,9 @@ class Blog extends Model
         'user_id',
         'image_id'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

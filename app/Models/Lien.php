@@ -11,8 +11,8 @@ class Lien extends Model
 
     protected $table = 'liens';
     protected $fillable = [
-        'content',
-        'url'
+        'link_content',
+        'link'
     ];
 
     public function divisions()

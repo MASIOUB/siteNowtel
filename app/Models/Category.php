@@ -11,4 +11,9 @@ class Category extends Model
 
     protected $table = 'nowtel_categories';
     protected $fillable = ['name'];
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class);
+    }
 }

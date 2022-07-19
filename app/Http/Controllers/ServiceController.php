@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Image;
 use App\Models\Page;
 use Illuminate\Http\Request;
-use App\Models\Section;
 
-class HomeController extends Controller
+class ServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +14,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $page_name = 'home';
-        // $pages = Page::all();
-        // $page = Page::where('name', $page_name)->first();
-        // $sections = Section::all()->join('sections', 'sections.page_id', '=', 'pages.id');
-    //     var_dump($pages);
-    //     die();
+        $page_name = 'service';
+        $page = Page::all()->where('name', $page_name)->first();
+        return view('/' . $page->name, ['page' => $page]);
     }
 
     /**

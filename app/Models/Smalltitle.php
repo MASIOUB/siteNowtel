@@ -11,7 +11,7 @@ class Smalltitle extends Model
 
     protected $table = 'small_titles';
     protected $fillable = [
-        'content',
+        'small_title_content',
         'color_id'
     ];
 

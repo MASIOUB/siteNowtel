@@ -16,8 +16,13 @@ class Message extends Model
         'subject_id'
     ];
 
-    public function messages()
+    public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
     }
 }
