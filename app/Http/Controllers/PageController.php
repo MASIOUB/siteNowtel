@@ -13,7 +13,9 @@ use App\Models\Section;
 use App\Models\Smalltitle;
 use App\Models\Title;
 use Illuminate\Http\Request;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use phpDocumentor\Reflection\DocBlock\Tags\See;
+use phpDocumentor\Reflection\Types\Boolean;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 
 class PageController extends Controller
@@ -31,6 +33,8 @@ class PageController extends Controller
         $page = new Page();
         $page->name = $request['name'];
         $page->url = $request['url'];
+        $page->save();
+        return back();
     }
 
     public function getSection($section_id)
@@ -88,69 +92,153 @@ class PageController extends Controller
         // $division->button_id = $button['id'];
         // $division->lien_id = $link['id'];
         // $division->section_id = $section_id;
+
+
+        $data = [
+            'type' => $request->type,
+            // 'title_id' => $title->id,
+            // 'small_title_id' => $small_title->id,
+            // 'paragraph_id' => $paragraph->id,
+            // 'button_id' => $button->id,
+            // 'lien_id' => $link->id,
+            // 'image_id' => $image->id,
+            'section_id' => $request->section_id
+        ];
+
+
+
         $color = Color::create([
             'code' => $request->code
         ]);
 
-        if($request->title_content){
+        if ($request->title_content) {
             $title = Title::create([
                 'title_content' => $request->title_content,
                 'color_content' => $request->color_content,
                 'color_id' => $color->id
             ]);
+            // array_push($data, ['title_id' => $title->id]);
+            $data = array_merge($data, ['title_id' => $title->id]);
         }
 
-        if($request->small_title_content){
+        if ($request->small_title_content) {
             $small_title = Smalltitle::create([
                 'small_title_content' => $request->small_title_content
             ]);
+            $data = array_merge($data, ['small_title_id' => $small_title->id]);
         }
 
-        if($request->image_name){
+        if ($request->image_name &&  $request->hasfile('image_name')) {
+
+            // if ($request->hasfile('image_name')) {
             $image = new Image();
-        if ($request->hasfile('image_name')) {
             $file = $request->file('image_name');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move('uploads/', $filename);
             $image->image_name = $filename;
-        }
-        $image->save();
+            $image->save();
+            // }
+            $data = array_merge($data, ['image_id' => $image->id]);
         }
 
 
-        if($request->paragraph_content){
+        if ($request->paragraph_content) {
             $paragraph = Paragraph::create([
                 'paragraph_content' => $request->paragraph_content
             ]);
+            $data = array_merge($data, ['paragraph_id' => $paragraph->id]);
         }
 
-        if($request->button_content){
-            $button = Button::create([
-                'button_content' => $request->button_content,
-                'button_link' => $request->button_link
-            ]);
-        }
+        // if ($request->button_content) {
+        //     $button = Button::create([
+        //         'button_content' => $request->button_content,
+        //         'button_link' => $request->button_link
+        //     ]);
+        // }
 
-        if($request->link_content){
-            $link = Lien::create([
-                'link_content' => $request->link_content,
-                'link' => $request->link
-            ]);
-        }
+        // if ($request->link_content) {
+        //     $link = Lien::create([
+        //         'link_content' => $request->link_content,
+        //         'link' => $request->link
+        //     ]);
+        // }
+        $button = $this->storeButtonContent($request->button_content, $request->button_link);
+        if ($button)
+        $data = array_merge($data, ['button_id' => $button->id]);
 
-
-        $division = Division::create([
-            'type' => $request->type,
-            'title_id' => $title->id,
-            'small_title_id' => $small_title->id,
-            'paragraph_id' => $paragraph->id,
-            'button_id' => $button->id,
-            'lien_id' => $link->id,
-            'image_id' => $image->id,
-            'section_id' => $request->section_id
-        ]);
+        $link = $this->storeLink($request->link_content, $request->link);
+        if ($link)
+        $data = array_merge($data, ['lien_id' => $link->id]);
 
 
-            return back();
+
+             $division = Division::create(
+                $data
+                //[
+            //     'type' => $request->type,
+            //     'title_id' => $title->id,
+            //     'small_title_id' => $small_title->id,
+            //     'paragraph_id' => $paragraph->id,
+            //     'button_id' => $button->id,
+            //     'lien_id' => $link->id,
+            //     'image_id' => $image->id,
+            //     'section_id' => $request->section_id
+            //]
+            );
+
+
+        return back();
     }
+    public function storeLink($link_content, $link): Lien | bool
+    {
+        if ($link_content) {
+            $link = Lien::create([
+                'link_content' => $link_content,
+                'link' => $link
+            ]);
+            return $link;
+        } else return false;
+    }
+    public function storeButtonContent($button_content, $button_link): Button | bool
+    {
+        if ($button_content) {
+            $button = Button::create([
+                'button_content' => $button_content,
+                'button_link' => $button_link
+            ]);
+            return $button;
+        } else
+            return false;
+    }
+
+    public function main()
+    {
+        return view('pages.main');
+    }
+
+    public function services()
+    {
+        return view('pages.services');
+    }
+
+    public function nouveautes()
+    {
+        return view('pages.nouveautes');
+    }
+
+    public function contact()
+    {
+        return view('pages.contact');
+    }
+
+    public function carrieres()
+    {
+        return view('pages.carrieres');
+    }
+
+    public function faq()
+    {
+        return view('pages.faq');
+    }
+
 }

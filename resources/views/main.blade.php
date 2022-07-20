@@ -46,6 +46,7 @@
     </ul>
 
     <form action="{{ route('page@store') }}" method="POST">
+        @csrf
         <div class="mb-3">
             <label class="form-label">Name Of Page:</label>
             <input type="text" name="name" class="form-control" placeholder="Name ...">
@@ -54,6 +55,7 @@
             <label class="form-label">Link Of Page</label>
             <input type="text" name="url" class="form-control" placeholder="Link ...">
         </div>
+        <input type="submit" class="btn btn-secondary" value="submit">
     </form>
 @endsection
 
