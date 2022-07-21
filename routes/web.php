@@ -18,11 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
-});
-
 Route::get('page/{page_id}', [App\Http\Controllers\PageController::class, 'getPage'])->name('page@getPage');
 
 
@@ -76,3 +71,8 @@ Route::get('/faq', [
     'uses' => 'App\Http\Controllers\PageController@faq',
     'as' => 'faq'
 ]);
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});

@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('divisions', function (Blueprint $table) {
-            $table->integer('title_id')->unsigned()->index()->change();
-            $table->foreign('title_id')->references('id')->on('titles')->onDelete('cascade');
+        Schema::table('consultations', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id')->nullable()->change();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -26,8 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('divisions', function (Blueprint $table) {
-            //
+        Schema::table('consultations', function (Blueprint $table) {
+            $table->integer('user_id')->nullable()->change();
         });
     }
 };

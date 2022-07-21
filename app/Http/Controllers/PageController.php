@@ -58,50 +58,8 @@ class PageController extends Controller
 
     public function storeDivision(Request $request)
     {
-        // $color = new Color();
-        // $color->code = $request['code'];
-
-        // $title = new Title();
-        // $title->title_content = $request['title_content'];
-        // $title->title_color_content = $request['color_content'];
-        // $title->title_position = $request['position'];
-        // $title->color_id = $request['color_id'];
-
-        // $small_title = new Smalltitle();
-        // $small_title->small_title_content = $request['small_title_content'];
-
-        // $paragraph = new Paragraph();
-        // $paragraph->paragraph_content = $request['paragraph_content'];
-
-
-
-        // $button = new Button();
-        // $button->button_content = $request['button_content'];
-        // $button->button_link = $request['button_link'];
-
-        // $link = new Lien();
-        // $link->link_content = $request['link_content'];
-        // $link->link = $request['link'];
-
-        // $division = new Division();
-        // $division->type = $request['type'];
-        // $division->title_id = $title['id'];
-        // $division->small_title_id = $small_title['id'];
-        // $division->image_id = $image['id'];
-        // $division->paragraph_id = $paragraph['id'];
-        // $division->button_id = $button['id'];
-        // $division->lien_id = $link['id'];
-        // $division->section_id = $section_id;
-
-
         $data = [
             'type' => $request->type,
-            // 'title_id' => $title->id,
-            // 'small_title_id' => $small_title->id,
-            // 'paragraph_id' => $paragraph->id,
-            // 'button_id' => $button->id,
-            // 'lien_id' => $link->id,
-            // 'image_id' => $image->id,
             'section_id' => $request->section_id
         ];
 
