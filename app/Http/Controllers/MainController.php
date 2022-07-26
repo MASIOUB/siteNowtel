@@ -54,11 +54,14 @@ class MainController extends Controller
      */
     public function store(Request $request)
     {
-        Page::create([
-            'name' => $request->name,
-            // 'content' => $request->content
-        ]);
-        return back();
+        // $test = Test::create([
+        //     'title' => $request->title,
+        //     'content' => $request->content
+        // ]);
+
+        // dd($test);
+
+        // return back();
     }
 
     /**

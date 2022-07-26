@@ -1,4 +1,5 @@
 @extends('layout.app')
+{{-- @extends('voyager::master') --}}
 
 @section('content')
     <section class="frontSection" id="front-section">

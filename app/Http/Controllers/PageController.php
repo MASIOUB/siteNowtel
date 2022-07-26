@@ -11,15 +11,25 @@ use App\Models\Lien;
 use App\Models\Paragraph;
 use App\Models\Section;
 use App\Models\Smalltitle;
+use App\Models\Test;
 use App\Models\Title;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use phpDocumentor\Reflection\DocBlock\Tags\See;
 use phpDocumentor\Reflection\Types\Boolean;
+use PhpParser\Node\Expr\AssignOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 
 class PageController extends Controller
 {
+
+    public function index()
+    {
+        $pages = Page::all();
+        return view('/main', ['pages' => $pages]);
+    }
+
     public function getPage($page_id)
     {
         $page = Page::find($page_id);
@@ -65,26 +75,9 @@ class PageController extends Controller
 
 
 
-        $color = Color::create([
-            'code' => $request->code
-        ]);
-
-        if ($request->title_content) {
-            $title = Title::create([
-                'title_content' => $request->title_content,
-                'color_content' => $request->color_content,
-                'color_id' => $color->id
-            ]);
-            // array_push($data, ['title_id' => $title->id]);
-            $data = array_merge($data, ['title_id' => $title->id]);
-        }
-
-        if ($request->small_title_content) {
-            $small_title = Smalltitle::create([
-                'small_title_content' => $request->small_title_content
-            ]);
-            $data = array_merge($data, ['small_title_id' => $small_title->id]);
-        }
+        // $color = Color::create([
+        //     'code' => $request->code
+        // ]);
 
         if ($request->image_name &&  $request->hasfile('image_name')) {
 
@@ -99,27 +92,22 @@ class PageController extends Controller
             $data = array_merge($data, ['image_id' => $image->id]);
         }
 
+        $color = $this->storeColor($request->code);
+        if($color)
+        $data = array_merge($data, ['code' => $color->id]);
 
-        if ($request->paragraph_content) {
-            $paragraph = Paragraph::create([
-                'paragraph_content' => $request->paragraph_content
-            ]);
-            $data = array_merge($data, ['paragraph_id' => $paragraph->id]);
-        }
+        $small_title = $this->storeSmallTitle($request->small_title_content);
+        if ($small_title)
+        $data = array_merge($data, ['small_title_id' => $small_title->id]);
 
-        // if ($request->button_content) {
-        //     $button = Button::create([
-        //         'button_content' => $request->button_content,
-        //         'button_link' => $request->button_link
-        //     ]);
-        // }
+        $paragraph = $this->storeParagraph($request->paragraph_content);
+        if($paragraph)
+        $data = array_merge($data, ['paragraph_id' => $paragraph->id]);
 
-        // if ($request->link_content) {
-        //     $link = Lien::create([
-        //         'link_content' => $request->link_content,
-        //         'link' => $request->link
-        //     ]);
-        // }
+        $title = $this->storeTitle($request->title_content);
+        if($title)
+        $data = array_merge($data, ['title_id' => $title->id]);
+
         $button = $this->storeButtonContent($request->button_content, $request->button_link);
         if ($button)
         $data = array_merge($data, ['button_id' => $button->id]);
@@ -147,16 +135,47 @@ class PageController extends Controller
 
         return back();
     }
-    public function storeLink($link_content, $link): Lien | bool
+
+    public function storeColor($color_code): Color | bool
     {
-        if ($link_content) {
-            $link = Lien::create([
-                'link_content' => $link_content,
-                'link' => $link
+        if ($color_code) {
+            $color = Color::create([
+                'code' => $color_code
             ]);
-            return $link;
+            return $color;
         } else return false;
     }
+
+    public function storeSmallTitle($small_title_content): Smalltitle | bool
+    {
+        if ($small_title_content) {
+            $small_title = Smalltitle::create([
+                'small_title_content' => $small_title_content
+            ]);
+            return $small_title;
+        } else return false;
+    }
+
+    public function storeTitle($title_content): Title | bool
+    {
+        if ($title_content) {
+            $title = Title::create([
+                'title_content' => $title_content
+            ]);
+            return $title;
+        } else return false;
+    }
+
+    public function storeParagraph($paragraph_content): Paragraph | bool
+    {
+        if ($paragraph_content) {
+            $paragraph = Paragraph::create([
+                'paragraph_content' => $paragraph_content
+            ]);
+            return $paragraph;
+        } else return false;
+    }
+
     public function storeButtonContent($button_content, $button_link): Button | bool
     {
         if ($button_content) {
@@ -167,6 +186,17 @@ class PageController extends Controller
             return $button;
         } else
             return false;
+    }
+
+    public function storeLink($link_content, $link): Lien | bool
+    {
+        if ($link_content) {
+            $link = Lien::create([
+                'link_content' => $link_content,
+                'link' => $link
+            ]);
+            return $link;
+        } else return false;
     }
 
     public function main()
@@ -197,6 +227,30 @@ class PageController extends Controller
     public function faq()
     {
         return view('pages.faq');
+    }
+
+    public function test()
+    {
+        // $page_name = 'main';
+        $page= Page::all()->where('name', 'Accueil')->first();
+        $sections = Section::where('page_id', $page->id)->with('divisions')->get();
+        // dd($sections);
+        // $divisions = Title::with('divisions')->where('titles.id', '2')->get();
+        // $divisions = Division::with('titles')->get();
+        // dd($divisions);
+        // $divisions = Division::join('titles', 'titles.id', '=', 'divisions.title_id')
+        // ->join('small_titles', 'small_titles.id', '=', 'divisions.small_title_id')
+        // ->join('paragraphs', 'paragraphs.id', '=', 'divisions.paragraph_id')
+        // ->join('buttons', 'buttons.id', '=', 'divisions.button_id')
+        // ->join('liens', 'liens.id', '=', 'divisions.lien_id')
+        // ->join('images', 'images.id', '=', 'divisions.image_id')->get();
+        foreach ($sections as $section) {
+            // $divisions = Division::where('section_id', $section->id)->with('titles');
+            $titles = Title::with('divisions')->get();
+            dd($titles);
+        };
+        // dd($divisions);
+        return view('pages.test', ['page' => $page, 'sections' => $sections]);
     }
 
 }

@@ -177,27 +177,7 @@
                 <span class="navbar-toggler-icon rounded-3"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav m-auto mb-2 mb-lg-0 menuList">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url('/main') }}">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/services') }}">Services informatiques</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="{{ url('/nouveautes') }}">Nouveautés</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/contact') }}">Nous joindre</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="{{ url('/carrieres') }}">Carrières</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/faq') }}">FAQ</a>
-                    </li>
-
-                </ul>
+                {{ menu('navbar', 'layout.menus.main') }}
                 <button class="ctaFilledBtn open-btn" onclick="openPopup()" type="button"
                     name="button">Consultation</button>
 

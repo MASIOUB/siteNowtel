@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use TCG\Voyager\Models\Role;
+use TCG\Voyager\Facades\Voyager;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,11 @@ use TCG\Voyager\Models\Role;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [App\Http\Controllers\PageController::class, 'index']);
 
 Route::get('page/{page_id}', [App\Http\Controllers\PageController::class, 'getPage'])->name('page@getPage');
 
@@ -70,6 +73,16 @@ Route::get('/carrieres', [
 Route::get('/faq', [
     'uses' => 'App\Http\Controllers\PageController@faq',
     'as' => 'faq'
+]);
+
+Route::get('/hello', [
+    'uses' => 'App\Http\Controllers\MainController@hello',
+    'as' => 'hello'
+]);
+
+Route::get('/test', [
+    'uses' => 'App\Http\Controllers\PageController@test',
+    'as' => 'test'
 ]);
 
 
